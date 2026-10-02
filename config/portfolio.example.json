@@ -1,0 +1,37 @@
+{
+  "profile": {
+    "name": "Investor",
+    "currency_home": "NGN",
+    "currency_away": "USD",
+    "time_horizon_years": 10,
+    "strategy": "Core and Satellite (Buy & Hold)"
+  },
+  "budget": {
+    "monthly_dca_home_ngn": 100000,
+    "monthly_dca_away_usd": 100
+  },
+  "risk_rules": {
+    "max_single_stock_pct": 10,
+    "min_broad_etf_core_pct": 50,
+    "min_solvency_interest_coverage": 5.0,
+    "min_roic_pct": 12.0
+  },
+  "holdings": {
+    "away": [
+      {
+        "ticker": "VOO",
+        "shares": 0.5,
+        "average_cost_usd": 485.20,
+        "asset_class": "ETF"
+      }
+    ],
+    "home": [
+      {
+        "ticker": "GTCO.LG",
+        "shares": 500,
+        "average_cost_ngn": 52.00,
+        "asset_class": "Stock"
+      }
+    ]
+  }
+}
