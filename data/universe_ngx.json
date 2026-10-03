@@ -1,0 +1,608 @@
+[
+  {
+    "symbol": "GTCO",
+    "name": "Guaranty Trust Holding Company Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "ZENITHBANK",
+    "name": "Zenith Bank Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "ACCESSCORP",
+    "name": "Access Holdings Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "UBA",
+    "name": "United Bank for Africa Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "FIRSTHOLDCO",
+    "name": "First HoldCo Plc (FBN Holdings)",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "STANBIC",
+    "name": "Stanbic IBTC Holdings Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "FIDELITYBK",
+    "name": "Fidelity Bank Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "FCMB",
+    "name": "FCMB Group Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "STERLINGNG",
+    "name": "Sterling Financial Holdings Company",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "WEMABANK",
+    "name": "Wema Bank Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "JAIZBANK",
+    "name": "Jaiz Bank Plc",
+    "sector": "Financials",
+    "industry": "Non-Interest Banking"
+  },
+  {
+    "symbol": "ETI",
+    "name": "Ecobank Transnational Incorporated",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "UNITYBNK",
+    "name": "Unity Bank Plc",
+    "sector": "Financials",
+    "industry": "Banking"
+  },
+  {
+    "symbol": "ABBEYBANK",
+    "name": "Abbey Mortgage Bank Plc",
+    "sector": "Financials",
+    "industry": "Mortgage Banking"
+  },
+  {
+    "symbol": "LIVINGTRUST",
+    "name": "LivingTrust Mortgage Bank Plc",
+    "sector": "Financials",
+    "industry": "Mortgage Banking"
+  },
+  {
+    "symbol": "NPFMCRFBK",
+    "name": "NPF Microfinance Bank Plc",
+    "sector": "Financials",
+    "industry": "Microfinance"
+  },
+  {
+    "symbol": "AIICO",
+    "name": "Aiico Insurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "CUSTODIAN",
+    "name": "Custodian Investment Plc",
+    "sector": "Financials",
+    "industry": "Insurance & Investments"
+  },
+  {
+    "symbol": "MANSARD",
+    "name": "AXA Mansard Insurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "CORNERST",
+    "name": "Cornerstone Insurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "NEM",
+    "name": "N.E.M. Insurance Co. (Nig) Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "LASACO",
+    "name": "Lasaco Assurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "PRESTIGE",
+    "name": "Prestige Assurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "ROYALEX",
+    "name": "Royal Exchange Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "SOVRENINS",
+    "name": "Sovereign Trust Insurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "SUNUASSUR",
+    "name": "Sunu Assurances Nigeria Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "UNIVERSINS",
+    "name": "Universal Insurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "VERITASKAP",
+    "name": "Veritas Kapital Assurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "WAPIC",
+    "name": "Coronation Insurance Plc",
+    "sector": "Financials",
+    "industry": "Insurance"
+  },
+  {
+    "symbol": "UCAP",
+    "name": "United Capital Plc",
+    "sector": "Financials",
+    "industry": "Investment Banking"
+  },
+  {
+    "symbol": "NGXGROUP",
+    "name": "Nigerian Exchange Group Plc",
+    "sector": "Financials",
+    "industry": "Market Infrastructure"
+  },
+  {
+    "symbol": "VFDGROUP",
+    "name": "VFD Group Plc",
+    "sector": "Financials",
+    "industry": "Proprietary Investment"
+  },
+  {
+    "symbol": "AFRTPR",
+    "name": "African Prudential Plc",
+    "sector": "Financials",
+    "industry": "Registrars & Tech"
+  },
+  {
+    "symbol": "DEAPCAP",
+    "name": "Deap Capital Management & Trust",
+    "sector": "Financials",
+    "industry": "Asset Management"
+  },
+  {
+    "symbol": "DANGCEM",
+    "name": "Dangote Cement Plc",
+    "sector": "Industrials",
+    "industry": "Building Materials (Cement)"
+  },
+  {
+    "symbol": "BUACEMENT",
+    "name": "BUA Cement Plc",
+    "sector": "Industrials",
+    "industry": "Building Materials (Cement)"
+  },
+  {
+    "symbol": "WAPCO",
+    "name": "Lafarge Africa Plc",
+    "sector": "Industrials",
+    "industry": "Building Materials (Cement)"
+  },
+  {
+    "symbol": "CAP",
+    "name": "CAP Plc (Chemical & Allied Products)",
+    "sector": "Industrials",
+    "industry": "Paints & Coatings"
+  },
+  {
+    "symbol": "BERGER",
+    "name": "Berger Paints Nigeria Plc",
+    "sector": "Industrials",
+    "industry": "Paints & Coatings"
+  },
+  {
+    "symbol": "MEYER",
+    "name": "Meyer Plc",
+    "sector": "Industrials",
+    "industry": "Paints & Coatings"
+  },
+  {
+    "symbol": "CUTIX",
+    "name": "Cutix Plc",
+    "sector": "Industrials",
+    "industry": "Electrical Cables & Wires"
+  },
+  {
+    "symbol": "PORTPAINT",
+    "name": "Portland Paints & Products Nig",
+    "sector": "Industrials",
+    "industry": "Building Materials"
+  },
+  {
+    "symbol": "NOTORE",
+    "name": "Notore Chemical Industries Plc",
+    "sector": "Industrials",
+    "industry": "Fertilizers & Chemicals"
+  },
+  {
+    "symbol": "NESTLE",
+    "name": "Nestle Nigeria Plc",
+    "sector": "Consumer Goods",
+    "industry": "Food Products"
+  },
+  {
+    "symbol": "BUAFOODS",
+    "name": "BUA Foods Plc",
+    "sector": "Consumer Goods",
+    "industry": "Food Processing (Sugar, Flour, Pasta)"
+  },
+  {
+    "symbol": "DANGSUGAR",
+    "name": "Dangote Sugar Refinery Plc",
+    "sector": "Consumer Goods",
+    "industry": "Sugar Refining"
+  },
+  {
+    "symbol": "FLOURMILL",
+    "name": "Flour Mills of Nigeria Plc",
+    "sector": "Consumer Goods",
+    "industry": "Food Products & Flour"
+  },
+  {
+    "symbol": "NASCON",
+    "name": "NASCON Allied Industries Plc",
+    "sector": "Consumer Goods",
+    "industry": "Salt & Seasoning"
+  },
+  {
+    "symbol": "NNFM",
+    "name": "Northern Nigeria Flour Mills Plc",
+    "sector": "Consumer Goods",
+    "industry": "Flour & Milling"
+  },
+  {
+    "symbol": "CADBURY",
+    "name": "Cadbury Nigeria Plc",
+    "sector": "Consumer Goods",
+    "industry": "Beverages & Confectionery"
+  },
+  {
+    "symbol": "UNILEVER",
+    "name": "Unilever Nigeria Plc",
+    "sector": "Consumer Goods",
+    "industry": "Household & Personal Care"
+  },
+  {
+    "symbol": "PZ",
+    "name": "PZ Cussons Nigeria Plc",
+    "sector": "Consumer Goods",
+    "industry": "Household & Personal Care"
+  },
+  {
+    "symbol": "NB",
+    "name": "Nigerian Breweries Plc",
+    "sector": "Consumer Goods",
+    "industry": "Beverages (Brewery)"
+  },
+  {
+    "symbol": "GUINNESS",
+    "name": "Guinness Nigeria Plc",
+    "sector": "Consumer Goods",
+    "industry": "Beverages (Brewery)"
+  },
+  {
+    "symbol": "CHAMPION",
+    "name": "Champion Breweries Plc",
+    "sector": "Consumer Goods",
+    "industry": "Beverages (Brewery)"
+  },
+  {
+    "symbol": "VITAFOAM",
+    "name": "Vitafoam Nigeria Plc",
+    "sector": "Consumer Goods",
+    "industry": "Household Durables (Foam)"
+  },
+  {
+    "symbol": "MCNICHOLS",
+    "name": "McNichols Plc",
+    "sector": "Consumer Goods",
+    "industry": "Food Packaging"
+  },
+  {
+    "symbol": "TANTALIZERS",
+    "name": "Tantalizers Plc",
+    "sector": "Consumer Goods",
+    "industry": "Fast Food & Restaurants"
+  },
+  {
+    "symbol": "FIDSON",
+    "name": "Fidson Healthcare Plc",
+    "sector": "Healthcare",
+    "industry": "Pharmaceuticals"
+  },
+  {
+    "symbol": "MAYBAKER",
+    "name": "May & Baker Nigeria Plc",
+    "sector": "Healthcare",
+    "industry": "Pharmaceuticals"
+  },
+  {
+    "symbol": "NEIMETH",
+    "name": "Neimeth International Pharma Plc",
+    "sector": "Healthcare",
+    "industry": "Pharmaceuticals"
+  },
+  {
+    "symbol": "PHARMDEKO",
+    "name": "Pharma-Deko Plc",
+    "sector": "Healthcare",
+    "industry": "Pharmaceuticals"
+  },
+  {
+    "symbol": "EKOCORP",
+    "name": "Ekocorp Plc",
+    "sector": "Healthcare",
+    "industry": "Medical Services & Hospitals"
+  },
+  {
+    "symbol": "MORISON",
+    "name": "Morison Industries Plc",
+    "sector": "Healthcare",
+    "industry": "Medical Supplies"
+  },
+  {
+    "symbol": "MTNN",
+    "name": "MTN Nigeria Communications Plc",
+    "sector": "Telecommunications",
+    "industry": "Mobile Telecommunications"
+  },
+  {
+    "symbol": "AIRTELAFRI",
+    "name": "Airtel Africa Plc",
+    "sector": "Telecommunications",
+    "industry": "Telecommunications & Mobile Money"
+  },
+  {
+    "symbol": "CWG",
+    "name": "CWG Plc (Computer Warehouse Group)",
+    "sector": "Technology",
+    "industry": "IT Solutions & Cloud"
+  },
+  {
+    "symbol": "CHAMS",
+    "name": "Chams Holding Company Plc",
+    "sector": "Technology",
+    "industry": "Identity & Digital Payments"
+  },
+  {
+    "symbol": "ETRANZACT",
+    "name": "E-Tranzact International Plc",
+    "sector": "Technology",
+    "industry": "Payment Processing & Fintech"
+  },
+  {
+    "symbol": "COURTVILLE",
+    "name": "Courteville Business Solutions Plc",
+    "sector": "Technology",
+    "industry": "E-Business Solutions"
+  },
+  {
+    "symbol": "SEPLAT",
+    "name": "Seplat Energy Plc",
+    "sector": "Energy",
+    "industry": "Oil & Gas Exploration & Production"
+  },
+  {
+    "symbol": "OANDO",
+    "name": "Oando Plc",
+    "sector": "Energy",
+    "industry": "Integrated Energy"
+  },
+  {
+    "symbol": "TOTAL",
+    "name": "TotalEnergies Marketing Nigeria Plc",
+    "sector": "Energy",
+    "industry": "Petroleum Product Marketing"
+  },
+  {
+    "symbol": "CONOIL",
+    "name": "Conoil Plc",
+    "sector": "Energy",
+    "industry": "Petroleum Product Marketing"
+  },
+  {
+    "symbol": "ETERNA",
+    "name": "Eterna Plc",
+    "sector": "Energy",
+    "industry": "Petroleum Product Marketing"
+  },
+  {
+    "symbol": "MRS",
+    "name": "MRS Oil Nigeria Plc",
+    "sector": "Energy",
+    "industry": "Petroleum Product Marketing"
+  },
+  {
+    "symbol": "PRESCO",
+    "name": "Presco Plc",
+    "sector": "Agriculture",
+    "industry": "Oil Palm Plantation"
+  },
+  {
+    "symbol": "OKOMUOILO",
+    "name": "Okomu Oil Palm Company Plc",
+    "sector": "Agriculture",
+    "industry": "Oil Palm & Rubber"
+  },
+  {
+    "symbol": "LIVESTOCK",
+    "name": "Livestock Feeds Plc",
+    "sector": "Agriculture",
+    "industry": "Animal Feeds & Milling"
+  },
+  {
+    "symbol": "ELLAHLAKES",
+    "name": "Ellah Lakes Plc",
+    "sector": "Agriculture",
+    "industry": "Fish Farming & Palm Oil"
+  },
+  {
+    "symbol": "FTNCOCOA",
+    "name": "FTN Cocoa Processors Plc",
+    "sector": "Agriculture",
+    "industry": "Cocoa Processing"
+  },
+  {
+    "symbol": "SFSREIT",
+    "name": "SFS Real Estate Investment Trust",
+    "sector": "Real Estate",
+    "industry": "Commercial REIT"
+  },
+  {
+    "symbol": "UPDCREIT",
+    "name": "UPDC Real Estate Investment Trust",
+    "sector": "Real Estate",
+    "industry": "Residential & Commercial REIT"
+  },
+  {
+    "symbol": "NREIT",
+    "name": "Nigeria REIT",
+    "sector": "Real Estate",
+    "industry": "Property Trust"
+  },
+  {
+    "symbol": "UPDC",
+    "name": "UACN Property Development Company",
+    "sector": "Real Estate",
+    "industry": "Real Estate Development"
+  },
+  {
+    "symbol": "TRANSCORP",
+    "name": "Transnational Corporation of Nigeria",
+    "sector": "Conglomerates",
+    "industry": "Power, Hospitality, Energy"
+  },
+  {
+    "symbol": "TRANSCOHOT",
+    "name": "Transcorp Hotels Plc",
+    "sector": "Consumer Services",
+    "industry": "Hotels & Hospitality"
+  },
+  {
+    "symbol": "UACN",
+    "name": "UAC of Nigeria Plc",
+    "sector": "Conglomerates",
+    "industry": "Paints, Real Estate, Logistics"
+  },
+  {
+    "symbol": "NAHCO",
+    "name": "Nigerian Aviation Handling Company",
+    "sector": "Services",
+    "industry": "Aviation Ground Handling"
+  },
+  {
+    "symbol": "SKYAVN",
+    "name": "Skyway Aviation Handling Company",
+    "sector": "Services",
+    "industry": "Aviation Ground Handling"
+  },
+  {
+    "symbol": "REDSTAREX",
+    "name": "Red Star Express Plc (FedEx)",
+    "sector": "Services",
+    "industry": "Courier & Logistics"
+  },
+  {
+    "symbol": "TRANSEXPR",
+    "name": "Trans-Nationwide Express Plc",
+    "sector": "Services",
+    "industry": "Courier & Logistics"
+  },
+  {
+    "symbol": "ABCTRANS",
+    "name": "Associated Bus Company Plc",
+    "sector": "Services",
+    "industry": "Transport & Logistics"
+  },
+  {
+    "symbol": "JOHNHOLT",
+    "name": "John Holt Plc",
+    "sector": "Conglomerates",
+    "industry": "Trading & Engineering"
+  },
+  {
+    "symbol": "SCOA",
+    "name": "SCOA Nigeria Plc",
+    "sector": "Conglomerates",
+    "industry": "Automotive & Equipment"
+  },
+  {
+    "symbol": "UPL",
+    "name": "University Press Plc",
+    "sector": "Services",
+    "industry": "Publishing & Printing"
+  },
+  {
+    "symbol": "ACADEMY",
+    "name": "Academy Press Plc",
+    "sector": "Services",
+    "industry": "Commercial Printing"
+  },
+  {
+    "symbol": "LEARNAFRCA",
+    "name": "Learn Africa Plc",
+    "sector": "Services",
+    "industry": "Publishing"
+  },
+  {
+    "symbol": "RTBRISCOE",
+    "name": "R.T. Briscoe (Nigeria) Plc",
+    "sector": "Services",
+    "industry": "Automotive Distribution"
+  },
+  {
+    "symbol": "IKEJAHOTEL",
+    "name": "Ikeja Hotel Plc (Sheraton)",
+    "sector": "Consumer Services",
+    "industry": "Hotels & Hospitality"
+  },
+  {
+    "symbol": "TOURIST",
+    "name": "Tourist Company of Nigeria",
+    "sector": "Consumer Services",
+    "industry": "Hotels & Gaming"
+  }
+]

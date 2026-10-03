@@ -1,5 +1,9 @@
 """
 Maya — Intelligent Long-Term Investment Research Bot (CLI Runner)
+Complete coverage for:
+- Home: 100% of Nigerian Stock Exchange (NGX) listed equities
+- Away: S&P 500 constituents (~503 global titan companies)
+- On-Demand: Any public company or ETF worldwide
 """
 
 import sys
@@ -21,6 +25,7 @@ from rich.markdown import Markdown
 from core.data_loader import DataLoader
 from core.screener import Screener
 from core.allocator import Allocator
+from core.universe import UniverseManager
 from ai.analyst import AIAnalyst
 from config.watchlist import WATCHLIST
 
@@ -124,31 +129,78 @@ def run_analyze(symbol: str):
     memo = ai.generate_qualitative_memo(data, result)
     console.print(Markdown(memo))
 
-def run_screen(market: str = "all"):
+def run_universe(market: str = "all"):
     market_choice = market.upper()
-    console.print(f"\n[bold green]🌐 Running Multi-Sector 5-Pillar Screener for: {market_choice}[/bold green]...")
-    loader = DataLoader()
+    console.print(f"\n[bold green]🌐 Asset Universe Overview: {market_choice}[/bold green]\n")
 
-    categories_to_scan = []
     if market_choice in ["HOME", "ALL"]:
-        for cat, items in WATCHLIST["HOME"].items():
-            for item in items:
-                categories_to_scan.append((item["symbol"], "Home (NGX)", cat))
-    if market_choice in ["AWAY", "ALL"]:
-        for cat, items in WATCHLIST["AWAY"].items():
-            for item in items:
-                categories_to_scan.append((item["symbol"], "Away (Global)", cat))
+        home_all = UniverseManager.get_home_universe()
+        sectors = UniverseManager.get_home_sectors()
+        console.print(f"[bold cyan]🇳🇬 Home Universe (Nigerian Stock Exchange - NGX):[/bold cyan] [bold yellow]{len(home_all)} Companies[/bold yellow] across [bold]{len(sectors)} Sectors[/bold]")
+        
+        h_table = Table(show_header=True, header_style="bold magenta")
+        h_table.add_column("Sector")
+        h_table.add_column("Count", justify="center")
+        h_table.add_column("Sample Tickers")
 
-    table = Table(title=f"🏆 Screener Results ({len(categories_to_scan)} Assets)", show_header=True, header_style="bold cyan")
+        for sec in sectors:
+            comps = UniverseManager.get_home_universe(sector=sec)
+            tickers = ", ".join([c["symbol"] for c in comps[:6]])
+            if len(comps) > 6:
+                tickers += f" (+{len(comps)-6} more)"
+            h_table.add_row(sec, str(len(comps)), tickers)
+        console.print(h_table)
+        console.print("")
+
+    if market_choice in ["AWAY", "ALL"]:
+        away_all = UniverseManager.get_away_universe()
+        sectors = UniverseManager.get_away_sectors()
+        console.print(f"[bold cyan]🌍 Away Universe (Global S&P 500 Index):[/bold cyan] [bold yellow]{len(away_all)} Companies[/bold yellow] across [bold]{len(sectors)} Sectors[/bold]")
+        
+        a_table = Table(show_header=True, header_style="bold cyan")
+        a_table.add_column("Sector")
+        a_table.add_column("Count", justify="center")
+        a_table.add_column("Sample Tickers")
+
+        for sec in sectors:
+            comps = UniverseManager.get_away_universe(sector=sec)
+            tickers = ", ".join([c["symbol"] for c in comps[:6]])
+            if len(comps) > 6:
+                tickers += f" (+{len(comps)-6} more)"
+            a_table.add_row(sec, str(len(comps)), tickers)
+        console.print(a_table)
+        console.print("")
+
+def run_screen(market: str = "all", sector: str = None, limit: int = 15):
+    market_choice = market.upper()
+    console.print(f"\n[bold green]🌐 Running Multi-Sector 5-Pillar Screener for: {market_choice}[/bold green]")
+    if sector:
+        console.print(f"Filter Sector: [bold yellow]{sector}[/bold yellow]")
+    console.print(f"Batch Limit: [bold]{limit}[/bold] companies\n")
+
+    loader = DataLoader()
+    assets_to_scan = []
+
+    if market_choice in ["HOME", "ALL"]:
+        home_comps = UniverseManager.get_home_universe(sector=sector)
+        for c in home_comps[:limit]:
+            assets_to_scan.append((c["symbol"], c["name"], "Home (NGX)", c.get("sector", "NGX Equities")))
+
+    if market_choice in ["AWAY", "ALL"]:
+        away_comps = UniverseManager.get_away_universe(sector=sector)
+        for c in away_comps[:limit]:
+            assets_to_scan.append((c["symbol"], c["name"], "Away (Global)", c.get("sector", "S&P 500")))
+
+    table = Table(title=f"🏆 Screener Results ({len(assets_to_scan)} Assets Evaluated)", show_header=True, header_style="bold cyan")
     table.add_column("Ticker", style="bold")
     table.add_column("Name")
     table.add_column("Market")
-    table.add_column("Sector/Category")
+    table.add_column("Sector")
     table.add_column("Price")
     table.add_column("Score", justify="center")
     table.add_column("Status", justify="center")
 
-    for symbol, market_name, category in categories_to_scan:
+    for symbol, name, market_name, sec_name in assets_to_scan:
         data = loader.fetch_asset_data(symbol)
         if not data or not data.get("info"):
             continue
@@ -158,9 +210,9 @@ def run_screen(market: str = "all"):
         status_color = "green" if "BUY" in res["status"] else ("yellow" if "WATCHLIST" in res["status"] else "red")
         table.add_row(
             symbol,
-            res["name"][:22],
+            name[:22],
             market_name,
-            category.replace("_", " ").title(),
+            sec_name[:18],
             price_str,
             f"{res['score']}/10",
             f"[{status_color}]{res['status'][:18]}[/{status_color}]"
@@ -215,11 +267,17 @@ def main():
 
     # Command: analyze <symbol>
     p_analyze = subparsers.add_parser("analyze", help="Perform deep 5-pillar fundamental analysis on any ticker")
-    p_analyze.add_argument("symbol", type=str, help="Ticker symbol (e.g. AAPL, MSFT, LLY, VOO, GTCO.LG, NEWGOLD.LG)")
+    p_analyze.add_argument("symbol", type=str, help="Ticker symbol (e.g. AAPL, MSFT, LLY, VOO, GTCO, NESTLE)")
+
+    # Command: universe [home|away|all]
+    p_univ = subparsers.add_parser("universe", help="View total company and sector breakdown for Home and Away")
+    p_univ.add_argument("market", nargs="?", default="all", choices=["home", "away", "all"], help="Market to inspect")
 
     # Command: screen [home|away|all]
     p_screen = subparsers.add_parser("screen", help="Scan entire asset universe across sectors")
     p_screen.add_argument("market", nargs="?", default="all", choices=["home", "away", "all"], help="Market to screen")
+    p_screen.add_argument("--sector", type=str, default=None, help="Filter by sector (e.g. Healthcare, Financials, Real Estate, Technology)")
+    p_screen.add_argument("--limit", type=int, default=15, help="Number of companies to evaluate in batch (default: 15)")
 
     # Command: allocate <amount> <currency>
     p_allocate = subparsers.add_parser("allocate", help="Generate exact share buy plan for your available cash")
@@ -230,8 +288,10 @@ def main():
 
     if args.command == "analyze":
         run_analyze(args.symbol)
+    elif args.command == "universe":
+        run_universe(args.market)
     elif args.command == "screen":
-        run_screen(args.market)
+        run_screen(args.market, sector=args.sector, limit=args.limit)
     elif args.command == "allocate":
         run_allocate(args.amount, args.currency)
     else:
