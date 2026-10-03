@@ -64,11 +64,18 @@ Provide a concise, razor-sharp memo addressing these exact points:
 
 Keep your response factual, rigorous, and free of hype.
 """
-        try:
-            response = self.client.models.generate_content(
-                model='gemini-2.5-flash',
-                contents=prompt
-            )
-            return response.text
-        except Exception as e:
-            return f"Error querying Gemini API: {e}"
+        models_to_try = ['gemini-flash-latest', 'gemini-3.5-flash', 'gemini-3.8-flash']
+        last_error = None
+        for model_name in models_to_try:
+            try:
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+                if response and response.text:
+                    return response.text
+            except Exception as e:
+                last_error = e
+                continue
+
+        return f"Error querying Gemini API: {last_error}"
