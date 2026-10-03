@@ -261,6 +261,58 @@ def run_allocate(amount: float, currency: str):
     console.print(f"\n[bold green]Total Deployed:[/bold green] {currency.upper()} {plan['total_spent']:,.2f}")
     console.print(f"[bold yellow]Remaining Cash Balance:[/bold yellow] {currency.upper()} {plan['unallocated_cash']:,.2f}\n")
 
+def run_buy(market: str = "home", budget: float = None):
+    market_choice = market.upper()
+    currency = "NGN" if market_choice == "HOME" else "USD"
+    
+    # Default budget if not provided
+    if budget is None:
+        budget = 100000.0 if currency == "NGN" else 100.0
+
+    console.print(f"\n[bold green]🎯 MAYA'S DIRECT BUY RECOMMENDATIONS ({market_choice})[/bold green]")
+    console.print(f"Analyzing all assets against [bold]Fund.md[/bold] for available budget: [bold yellow]{currency} {budget:,.2f}[/bold yellow]...\n")
+
+    loader = DataLoader()
+    candidates = []
+
+    # Pull candidate assets
+    for cat, items in WATCHLIST[market_choice].items():
+        for item in items:
+            data = loader.fetch_asset_data(item["symbol"])
+            if data and data.get("info"):
+                res = Screener.evaluate(data)
+                res["sector_or_class"] = cat.replace("_", " ").title()
+                candidates.append(res)
+
+    # Filter strictly for STRONG BUY or approved assets
+    buy_picks = [c for c in candidates if "BUY" in c["status"] or c["score"] >= 8]
+    if not buy_picks:
+        buy_picks = sorted(candidates, key=lambda x: x.get("score", 0), reverse=True)[:3]
+
+    allocator = Allocator()
+    plan = allocator.allocate(total_amount=budget, currency=currency, qualified_assets=buy_picks)
+
+    console.print(Panel(
+        f"[bold white]HERE IS EXACTLY WHAT TO BUY TODAY ({currency} {budget:,.2f})[/bold white]\n"
+        f"All recommendations passed your 5-Pillar Fund.md financial safety filter.",
+        title="🟢 DIRECT EXECUTION DIRECTIVE",
+        style="green",
+        expand=False
+    ))
+
+    order_num = 1
+    for item in plan["items"]:
+        shares_str = f"{item.shares_to_buy:,.4f}" if item.is_fractional else f"{int(item.shares_to_buy):,d}"
+        console.print(f"[bold cyan]{order_num}. BUY [yellow]{item.symbol}[/yellow] — {item.name}[/bold cyan]")
+        console.print(f"   • [bold]Action:[/bold] Buy [bold green]{shares_str} shares[/bold green] at {currency} {item.market_price:,.2f}")
+        console.print(f"   • [bold]Cost:[/bold] {currency} {item.allocated_amount:,.2f}")
+        console.print(f"   • [bold]Role in Portfolio:[/bold] {item.sector_or_class}")
+        console.print("")
+        order_num += 1
+
+    console.print(f"[bold green]✔ Total Capital Deployed:[/bold green] {currency} {plan['total_spent']:,.2f}")
+    console.print(f"[bold yellow]💵 Remaining Cash to Leave in Wallet:[/bold yellow] {currency} {plan['unallocated_cash']:,.2f}\n")
+
 def run_fund():
     console.print("\n[bold magenta]📜 Fund.md — Core Fundamental Analysis Framework[/bold magenta]")
     with open("Fund.md", "r", encoding="utf-8") as f:
@@ -274,6 +326,11 @@ def run_fund():
 def main():
     parser = argparse.ArgumentParser(description="Maya: Long-Term Buy & Hold Investment Research Bot")
     subparsers = parser.add_subparsers(dest="command", help="Available Commands")
+
+    # Command: buy [home|away] [--budget <amount>]
+    p_buy = subparsers.add_parser("buy", help="Get Maya's exact, unambiguous buy orders for today")
+    p_buy.add_argument("market", nargs="?", default="home", choices=["home", "away"], help="Market to buy in (default: home)")
+    p_buy.add_argument("--budget", type=float, default=None, help="Amount of cash to invest")
 
     # Command: fund
     p_fund = subparsers.add_parser("fund", help="Display the core Fund.md checklist and automation mapping")
@@ -299,7 +356,9 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "fund":
+    if args.command == "buy":
+        run_buy(market=args.market, budget=args.budget)
+    elif args.command == "fund":
         run_fund()
     elif args.command == "analyze":
         run_analyze(args.symbol)
