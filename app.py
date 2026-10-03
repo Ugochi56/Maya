@@ -261,9 +261,22 @@ def run_allocate(amount: float, currency: str):
     console.print(f"\n[bold green]Total Deployed:[/bold green] {currency.upper()} {plan['total_spent']:,.2f}")
     console.print(f"[bold yellow]Remaining Cash Balance:[/bold yellow] {currency.upper()} {plan['unallocated_cash']:,.2f}\n")
 
+def run_fund():
+    console.print("\n[bold magenta]📜 Fund.md — Core Fundamental Analysis Framework[/bold magenta]")
+    with open("Fund.md", "r", encoding="utf-8") as f:
+        content = f.read()
+    console.print(Markdown(content))
+    console.print("\n[bold green]🤖 How Maya Automates This Checklist:[/bold green]")
+    console.print(" • [cyan]Items #2, #5, #6, #7, #8, #9:[/cyan] Calculated mathematically in [bold]core/financials.py[/bold] & [bold]core/valuation.py[/bold]")
+    console.print(" • [cyan]Items #1, #3, #4 & Customer Scuttlebutt:[/cyan] Evaluated qualitatively via Gemini LLM in [bold]ai/analyst.py[/bold]")
+    console.print(" • [cyan]Study the Money:[/cyan] 5-Year Free Cash Flow reliability verified in [bold]core/screener.py[/bold]\n")
+
 def main():
     parser = argparse.ArgumentParser(description="Maya: Long-Term Buy & Hold Investment Research Bot")
     subparsers = parser.add_subparsers(dest="command", help="Available Commands")
+
+    # Command: fund
+    p_fund = subparsers.add_parser("fund", help="Display the core Fund.md checklist and automation mapping")
 
     # Command: analyze <symbol>
     p_analyze = subparsers.add_parser("analyze", help="Perform deep 5-pillar fundamental analysis on any ticker")
@@ -286,7 +299,9 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "analyze":
+    if args.command == "fund":
+        run_fund()
+    elif args.command == "analyze":
         run_analyze(args.symbol)
     elif args.command == "universe":
         run_universe(args.market)
