@@ -257,9 +257,93 @@ def run_allocate(amount: float, currency: str):
             f"{item.currency} {item.allocated_amount:,.2f}"
         )
 
+def run_top(market: str = "home", budget: float = None):
+    market_choice = market.upper()
+    currency = "NGN" if market_choice == "HOME" else "USD"
+
+    console.print(f"\n[bold green]🏆 TOP 10 HIGHEST-CONVICTION BUY LEADERBOARD ({market_choice})[/bold green]")
+    console.print(f"Scanning market universe against [bold]Fund.md[/bold] 5-pillar rules...\n")
+
+    loader = DataLoader()
+    candidates = []
+
+    # Pull candidate assets across sectors
+    for cat, items in WATCHLIST[market_choice].items():
+        for item in items:
+            data = loader.fetch_asset_data(item["symbol"])
+            if data and data.get("info"):
+                res = Screener.evaluate(data)
+                res["sector_or_class"] = cat.replace("_", " ").title()
+                candidates.append(res)
+
+    # Sort strictly by score descending
+    candidates.sort(key=lambda x: x.get("score", 0), reverse=True)
+    top_10 = candidates[:10]
+
+    table = Table(title=f"🥇 Top 10 Highest-Conviction Compounders ({market_choice})", show_header=True, header_style="bold cyan")
+    table.add_column("Rank", justify="center", style="bold yellow")
+    table.add_column("Ticker", style="bold")
+    table.add_column("Name")
+    table.add_column("Sector")
+    table.add_column("Current Price", justify="right")
+    table.add_column("Score", justify="center")
+    table.add_column("Verdict", justify="center")
+
+    rank = 1
+    for c in top_10:
+        price_str = f"{c['currency']} {c['current_price']:,.2f}" if c.get("current_price") else "N/A"
+        status_color = "green" if "BUY" in c["status"] else "yellow"
+        table.add_row(
+            str(rank),
+            c["symbol"],
+            c["name"][:20],
+            c.get("sector_or_class", "Equity")[:18],
+            price_str,
+            f"{c['score']}/10",
+            f"[{status_color}]{c['status'][:18]}[/{status_color}]"
+        )
+        rank += 1
+
     console.print(table)
-    console.print(f"\n[bold green]Total Deployed:[/bold green] {currency.upper()} {plan['total_spent']:,.2f}")
-    console.print(f"[bold yellow]Remaining Cash Balance:[/bold yellow] {currency.upper()} {plan['unallocated_cash']:,.2f}\n")
+
+    # Step 2: Prompt for budget if not passed
+    if budget is None:
+        try:
+            console.print(f"\n[bold yellow]💰 How much cash do you want to invest today in {currency}?[/bold yellow]")
+            user_input = input(f"Enter amount in {currency} (e.g. {'100000' if currency == 'NGN' else '100'}, or press Enter to exit): ").strip()
+            if not user_input:
+                console.print("[dim]No budget entered. Viewing completed.[/dim]\n")
+                return
+            budget = float(user_input.replace(",", "").replace(currency, "").strip())
+        except (ValueError, EOFError, KeyboardInterrupt):
+            console.print("[dim]Operation cancelled.[/dim]\n")
+            return
+
+    # Step 3: Automatically allocate into the top picks
+    console.print(f"\n[bold magenta]⚡ Calculating exact share execution plan for {currency} {budget:,.2f}...[/bold magenta]\n")
+    allocator = Allocator()
+    plan = allocator.allocate(total_amount=budget, currency=currency, qualified_assets=top_10)
+
+    console.print(Panel(
+        f"[bold white]YOUR CUSTOMIZED {currency} {budget:,.2f} BUY PLAN[/bold white]\n"
+        f"Selected from the top-rated Fund.md compounders above.",
+        title="🟢 DIRECT EXECUTION DIRECTIVE",
+        style="green",
+        expand=False
+    ))
+
+    order_num = 1
+    for item in plan["items"]:
+        shares_str = f"{item.shares_to_buy:,.4f}" if item.is_fractional else f"{int(item.shares_to_buy):,d}"
+        console.print(f"[bold cyan]{order_num}. BUY [yellow]{item.symbol}[/yellow] — {item.name}[/bold cyan]")
+        console.print(f"   • [bold]Action:[/bold] Buy [bold green]{shares_str} shares[/bold green] at {currency} {item.market_price:,.2f}")
+        console.print(f"   • [bold]Cost:[/bold] {currency} {item.allocated_amount:,.2f}")
+        console.print(f"   • [bold]Role in Portfolio:[/bold] {item.sector_or_class}")
+        console.print("")
+        order_num += 1
+
+    console.print(f"[bold green]✔ Total Capital Deployed:[/bold green] {currency} {plan['total_spent']:,.2f}")
+    console.print(f"[bold yellow]💵 Remaining Cash to Leave in Wallet:[/bold yellow] {currency} {plan['unallocated_cash']:,.2f}\n")
 
 def run_buy(market: str = "home", budget: float = None):
     market_choice = market.upper()
@@ -327,6 +411,11 @@ def main():
     parser = argparse.ArgumentParser(description="Maya: Long-Term Buy & Hold Investment Research Bot")
     subparsers = parser.add_subparsers(dest="command", help="Available Commands")
 
+    # Command: top [home|away] [--budget <amount>]
+    p_top = subparsers.add_parser("top", help="View Top 10 Leaderboard, then enter cash to get exact buy plan")
+    p_top.add_argument("market", nargs="?", default="home", choices=["home", "away"], help="Market to screen (default: home)")
+    p_top.add_argument("--budget", type=float, default=None, help="Optional cash amount to allocate directly")
+
     # Command: buy [home|away] [--budget <amount>]
     p_buy = subparsers.add_parser("buy", help="Get Maya's exact, unambiguous buy orders for today")
     p_buy.add_argument("market", nargs="?", default="home", choices=["home", "away"], help="Market to buy in (default: home)")
@@ -356,7 +445,9 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "buy":
+    if args.command == "top":
+        run_top(market=args.market, budget=args.budget)
+    elif args.command == "buy":
         run_buy(market=args.market, budget=args.budget)
     elif args.command == "fund":
         run_fund()
