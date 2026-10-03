@@ -26,6 +26,7 @@ from core.data_loader import DataLoader
 from core.screener import Screener
 from core.allocator import Allocator
 from core.universe import UniverseManager
+from core.forecaster import CompoundForecaster
 from ai.analyst import AIAnalyst
 from config.watchlist import WATCHLIST
 
@@ -117,13 +118,30 @@ def run_analyze(symbol: str):
         e_table.add_row("Classification", etf.get("verdict"))
         console.print(e_table)
 
-    # 5. Key Highlights / Bullet Points
+    # 5. Compounding Wealth Forecaster (5, 10 & 20-Year Horizons)
+    cagr_data = CompoundForecaster.estimate_cagr(data)
+    ref_principal = 100000.0 if result["is_ngx"] else 1000.0
+    projections = CompoundForecaster.project_wealth(ref_principal, cagr_data["expected_cagr"])
+
+    p_table = Table(title=f"🔮 Long-Term Compounding Forecast (Hypothetical {currency} {ref_principal:,.0f} Buy & Hold)", show_header=True, header_style="bold green")
+    p_table.add_column("Horizon")
+    p_table.add_column("Expected Growth Rate", justify="center")
+    p_table.add_column("Projected Value", justify="right", style="bold yellow")
+    p_table.add_column("Total Return", justify="right", style="bold green")
+
+    p_table.add_row("Annual Compounding (CAGR)", f"+{cagr_data['cagr_pct']:.1f}%/yr", f"Div: +{cagr_data['dividend_component_pct']:.1f}% | Growth: +{cagr_data['growth_component_pct']:.1f}%", "-")
+    p_table.add_row("5 Years", f"+{cagr_data['cagr_pct']:.1f}%/yr", f"{currency} {projections[5]['future_value']:,.2f}", f"+{projections[5]['gain_pct']:.1f}% ({projections[5]['multiple']:.1f}x)")
+    p_table.add_row("10 Years", f"+{cagr_data['cagr_pct']:.1f}%/yr", f"{currency} {projections[10]['future_value']:,.2f}", f"+{projections[10]['gain_pct']:.1f}% ({projections[10]['multiple']:.1f}x)")
+    p_table.add_row("20 Years", f"+{cagr_data['cagr_pct']:.1f}%/yr", f"{currency} {projections[20]['future_value']:,.2f}", f"+{projections[20]['gain_pct']:.1f}% ({projections[20]['multiple']:.1f}x)")
+    console.print(p_table)
+
+    # 6. Key Highlights / Bullet Points
     if result.get("summary"):
         console.print("\n[bold yellow]📌 Core Takeaways:[/bold yellow]")
         for point in result["summary"]:
             console.print(f" • {point}")
 
-    # 6. Qualitative AI Research Memo (Gemini)
+    # 7. Qualitative AI Research Memo (Gemini)
     console.print("\n[bold cyan]🧠 AI Qualitative Moat & Business Analysis:[/bold cyan]")
     ai = AIAnalyst()
     memo = ai.generate_qualitative_memo(data, result)
@@ -274,6 +292,9 @@ def run_top(market: str = "home", budget: float = None):
             if data and data.get("info"):
                 res = Screener.evaluate(data)
                 res["sector_or_class"] = cat.replace("_", " ").title()
+                cagr_info = CompoundForecaster.estimate_cagr(data)
+                res["cagr_pct"] = cagr_info["cagr_pct"]
+                res["cagr_rate"] = cagr_info["expected_cagr"]
                 candidates.append(res)
 
     # Sort strictly by score descending
@@ -286,6 +307,7 @@ def run_top(market: str = "home", budget: float = None):
     table.add_column("Name")
     table.add_column("Sector")
     table.add_column("Current Price", justify="right")
+    table.add_column("Exp. Return", justify="center", style="bold magenta")
     table.add_column("Score", justify="center")
     table.add_column("Verdict", justify="center")
 
@@ -293,12 +315,14 @@ def run_top(market: str = "home", budget: float = None):
     for c in top_10:
         price_str = f"{c['currency']} {c['current_price']:,.2f}" if c.get("current_price") else "N/A"
         status_color = "green" if "BUY" in c["status"] else "yellow"
+        exp_return_str = f"+{c.get('cagr_pct', 12.0):.1f}%/yr"
         table.add_row(
             str(rank),
             c["symbol"],
-            c["name"][:20],
-            c.get("sector_or_class", "Equity")[:18],
+            c["name"][:18],
+            c.get("sector_or_class", "Equity")[:16],
             price_str,
+            exp_return_str,
             f"{c['score']}/10",
             f"[{status_color}]{c['status'][:18]}[/{status_color}]"
         )
@@ -344,6 +368,20 @@ def run_top(market: str = "home", budget: float = None):
 
     console.print(f"[bold green]✔ Total Capital Deployed:[/bold green] {currency} {plan['total_spent']:,.2f}")
     console.print(f"[bold yellow]💵 Remaining Cash to Leave in Wallet:[/bold yellow] {currency} {plan['unallocated_cash']:,.2f}\n")
+
+    # Step 4: Long-Term Compounding Projection
+    avg_cagr = 0.185 if currency == "NGN" else 0.108
+    proj = CompoundForecaster.project_wealth(plan["total_spent"], avg_cagr)
+    console.print(Panel(
+        f"🌱 [bold green]Long-Term Wealth Projection for this {currency} {plan['total_spent']:,.2f} Deposit:[/bold green]\n"
+        f" • [bold]In 5 Years (Age 26):[/bold]  ~{currency} {proj[5]['future_value']:,.2f} ([green]+{proj[5]['gain_pct']:.1f}%[/green] gain)\n"
+        f" • [bold]In 10 Years (Age 31):[/bold] ~{currency} {proj[10]['future_value']:,.2f} ([green]+{proj[10]['gain_pct']:.1f}%[/green] gain, {proj[10]['multiple']:.1f}x)\n"
+        f" • [bold]In 20 Years (Age 41):[/bold] ~{currency} {proj[20]['future_value']:,.2f} ([green]+{proj[20]['gain_pct']:.1f}%[/green] gain, {proj[20]['multiple']:.1f}x)",
+        title="📈 COMPOUND INTEREST PROJECTION",
+        style="cyan",
+        expand=False
+    ))
+    console.print("")
 
 def run_buy(market: str = "home", budget: float = None):
     market_choice = market.upper()
