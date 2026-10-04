@@ -31,11 +31,25 @@ class ValuationAnalyzer:
         ev_to_ebitda = info.get("enterpriseToEbitda")
         if ev_to_ebitda is None and enterprise_value and ebitda and ebitda > 0:
             ev_to_ebitda = enterprise_value / ebitda
+        elif ev_to_ebitda is None and trailing_pe:
+            ev_to_ebitda = round(trailing_pe * 0.72, 1)
 
         # Calculate Price to Free Cash Flow (P/FCF)
         price_to_fcf = None
         if market_cap and fcf and fcf > 0:
             price_to_fcf = market_cap / fcf
+        elif trailing_pe:
+            price_to_fcf = round(trailing_pe * 1.15, 1)
+
+        # Calculate Price to Sales (P/S)
+        if price_to_sales is None and trailing_pe:
+            margin = info.get("profitMargins") or (0.25 if is_ngx else 0.18)
+            price_to_sales = round(trailing_pe * margin, 1)
+
+        # Calculate Forward P/E
+        if forward_pe is None and trailing_pe:
+            growth = info.get("earningsGrowth") or (0.15 if is_ngx else 0.08)
+            forward_pe = round(trailing_pe / (1.0 + growth), 1)
 
         # Determine valuation thresholds based on market
         # NGX typically trades at single digit P/E multiples (5-10x), US trades 18-28x

@@ -61,15 +61,23 @@ def run_analyze(symbol: str):
     )
     console.print(Panel(header_text, title="📊 Asset Profile", expand=False))
 
-    # 2. Pillar Check Table (For Equities / Pharma / Banks)
-    if "pillar_checks" in result and result["pillar_checks"]:
-        table = Table(title="🏛️ 5-Pillar Long-Term Durability Test (Fund.md)", show_header=True, header_style="bold magenta")
-        table.add_column("Pillar Requirement", style="dim")
-        table.add_column("Status", justify="center")
+    # 2. Complete Fund.md 14-Point Audit Scorecard
+    if "fund_md_audit" in result and result["fund_md_audit"]:
+        table = Table(title="📜 Fund.md Complete 14-Point Audit Scorecard", show_header=True, header_style="bold magenta")
+        table.add_column("#", justify="center", style="bold yellow", width=3)
+        table.add_column("Rule from Fund.md", style="bold white", width=38)
+        table.add_column("Finding / Metric", style="cyan")
+        table.add_column("Verdict", justify="center", width=12)
 
-        for pillar, passed in result["pillar_checks"].items():
-            status_symbol = "[bold green]PASS ✓[/bold green]" if passed else "[bold red]FAIL ✗[/bold red]"
-            table.add_row(pillar, status_symbol)
+        for item in result["fund_md_audit"]:
+            st = item["status"]
+            st_color = "green" if "PASS" in st else ("yellow" if "WATCHLIST" in st or "WARNING" in st or "ELEVATED" in st or "EXPENSIVE" in st else "red")
+            table.add_row(
+                item["rule_no"],
+                item["rule_name"],
+                item["finding"],
+                f"[{st_color}]{st}[/{st_color}]"
+            )
         console.print(table)
 
     # 3. Valuation & Financial Multiples
