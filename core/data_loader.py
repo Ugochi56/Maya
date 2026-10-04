@@ -13,6 +13,7 @@ import yfinance as yf
 import pandas as pd
 
 from core.universe import UniverseManager
+from core.news import NewsFetcher
 
 class DataLoader:
     def __init__(self, cache_enabled: bool = True):
@@ -23,7 +24,7 @@ class DataLoader:
         })
         self._ngx_symbols = {c["symbol"] for c in UniverseManager.get_home_universe()}
 
-    def fetch_asset_data(self, symbol: str) -> Optional[Dict[str, Any]]:
+    def fetch_asset_data(self, symbol: str, include_news: bool = False) -> Optional[Dict[str, Any]]:
         clean_symbol = symbol.strip().upper().replace(".LG", "")
         if self._cache and clean_symbol in self._cache:
             return self._cache[clean_symbol]
@@ -34,6 +35,10 @@ class DataLoader:
             data = self._fetch_ngx_data(clean_symbol)
         else:
             data = self._fetch_global_data(clean_symbol)
+
+        if data and include_news:
+            name = data.get("info", {}).get("longName") or clean_symbol
+            data["news"] = NewsFetcher.fetch_news(clean_symbol, name, is_ngx=is_ngx)
 
         if data and self._cache is not None:
             self._cache[clean_symbol] = data

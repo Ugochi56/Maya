@@ -35,7 +35,7 @@ console = Console(legacy_windows=False)
 def run_analyze(symbol: str):
     console.print(f"\n[bold cyan]🔍 Fetching & analyzing asset:[/bold cyan] [yellow]{symbol.upper()}[/yellow]...")
     loader = DataLoader()
-    data = loader.fetch_asset_data(symbol)
+    data = loader.fetch_asset_data(symbol, include_news=True)
     if not data or not data.get("info"):
         console.print(f"[bold red]❌ Failed to retrieve data for ticker '{symbol}'. Check symbol spelling or network.[/bold red]")
         return
@@ -149,7 +149,23 @@ def run_analyze(symbol: str):
         for point in result["summary"]:
             console.print(f" • {point}")
 
-    # 7. Qualitative AI Research Memo (Gemini)
+    # 7. Real-Time News & Media Scuttlebutt Wire (Fund.md Check)
+    news_items = data.get("news", [])
+    if news_items:
+        n_table = Table(title="📰 Real-Time News & Scuttlebutt Wire (Fund.md: 'Watch What They Actually Do')", show_header=True, header_style="bold yellow")
+        n_table.add_column("Date", style="dim", width=16)
+        n_table.add_column("Headline", style="bold white")
+        n_table.add_column("Source", style="cyan", width=22)
+
+        for item in news_items:
+            n_table.add_row(
+                item.get("date", "Recent"),
+                item.get("title", ""),
+                item.get("source", "Market Wire")
+            )
+        console.print(n_table)
+
+    # 8. Qualitative AI Research Memo (Gemini)
     console.print("\n[bold cyan]🧠 AI Qualitative Moat & Business Analysis:[/bold cyan]")
     ai = AIAnalyst()
     memo = ai.generate_qualitative_memo(data, result)

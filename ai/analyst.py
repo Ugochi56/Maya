@@ -42,13 +42,20 @@ class AIAnalyst:
                 f"and add `GEMINI_API_KEY=your_key` to your `.env` file."
             )
 
+        news_items = asset_data.get("news", [])
+        news_section = ""
+        if news_items:
+            news_lines = [f"- [{n.get('source', 'News')}] {n.get('title')} ({n.get('date', '')})" for n in news_items]
+            news_section = "\nReal-Time News Wire & Scuttlebutt (Fund.md Check: 'Watch what the company actually does'):\n" + "\n".join(news_lines)
+
         prompt = f"""
 You are an expert, disciplined value investor following the exact philosophies of Warren Buffett, Charlie Munger, and Peter Lynch.
-Analyze this company strictly according to the user's checklist:
+Analyze this company strictly according to the user's Fund.md checklist:
 
 Company: {name} ({symbol})
 Sector: {sector} | Industry: {industry}
 Business Overview: {summary}
+{news_section}
 
 Quantitative Screening Context:
 - Screener Status: {screen_results.get('status')}
@@ -61,6 +68,7 @@ Provide a concise, razor-sharp memo addressing these exact points:
 3. **Management & Capital Allocation:** Do they behave like owner-operators or empire builders?
 4. **Key Risks & Obsolescence:** What could break this business over the next decade?
 5. **Customer & Competition Scuttlebutt:** Are customers locked in or looking for alternatives?
+6. **Real-World Corporate Actions & News Synthesis:** Based on recent news headlines and company moves, what is management actually doing right now? Any red flags or catalyst tailwinds?
 
 Keep your response factual, rigorous, and free of hype.
 """
